@@ -133,19 +133,24 @@
 
   <script>
 
-    function ajustarDiseño() {
-  const anchoPantalla = window.innerWidth;
-  const body = document.querySelector('body');
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbz9KlfUFNdHAtGBVNOBWNkzZ2TAcn42cKqmaXygt2TZ7A4RmuX_NgF1ntZuERKoioyUpA/exec';
 
-  if (anchoPantalla < 600) { // Móvil
-    body.style.fontSize = '14px';
-  } else { // Escritorio
-    body.style.fontSize = '16px';
-  }
-}
+    async function obtenerDatos(id) {
+        
 
-window.onload = ajustarDiseño;
-window.onresize = ajustarDiseño;
+        try {
+          const response = await fetch(`${scriptUrl}?id=${id}`);
+          const data = await response.json();
+          console.log(data); // Procesa los datos recibidos, puedes mostrarlos en la interfaz
+        } catch (error) {
+          console.error('Error al obtener datos:', error);
+        }
+    }      
+
+
+
+
+   
 
     function buscarUsuario() {
       var busqueda = document.getElementById("busqueda").value;
