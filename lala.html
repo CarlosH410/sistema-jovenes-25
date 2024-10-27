@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+
+  <title>Document</title>
+  <base target="_top">
+    <script>
+        function submitForm() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            google.script.run.withSuccessHandler(displayRegistrations).addRegistration(name, email);
+        }
+
+        function displayRegistrations(data) {
+            const table = document.getElementById('registrations');
+            table.innerHTML = '';
+            data.forEach(row => {
+                const newRow = table.insertRow();
+                row.forEach(cell => {
+                    const newCell = newRow.insertCell();
+                    newCell.textContent = cell;
+                });
+            });
+        }
+
+        function loadRegistrations() {
+            google.script.run.withSuccessHandler(displayRegistrations).getRegistrations();
+        }
+    </script>
+</head>
+<body onload="loadRegistrations()">
+    <h1>Inscripción</h1>
+    <form onsubmit="event.preventDefault(); submitForm();">
+        <input type="text" id="name" placeholder="Nombre" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <button type="submit">Inscribirse</button>
+    </form>
+    <h2>Inscripciones</h2>
+    <table id="registrations" border="1">
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Fecha de Inscripción</th>
+            <th>Estado</th>
+        </tr>
+    </table>
+</body>
+</html>

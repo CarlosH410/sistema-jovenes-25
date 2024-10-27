@@ -1,0 +1,146 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+}
+
+.header {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://example.com/hero-image.jpg');
+    background-size: cover;
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+}
+
+.btn-primary {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    margin-top: 15px;
+    transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #ff4b4b;
+}
+
+.nav {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 0;
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    color: white;
+}
+
+.menu-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.menu-icon span {
+    background-color: white;
+    height: 3px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.info {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.feature {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cta {
+    padding: 50px 20px;
+    background-color: #ff6b6b;
+    text-align: center;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #ff6b6b;
+    padding: 15px 25px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    margin-top: 15px;
+    transition: background 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #ff4b4b;
+    color: white;
+}
+
+.footer {
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .hero h2 {
+        font-size: 2rem;
+    }
+
+    .features {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .feature {
+        width: 100%;
+    }
+}
