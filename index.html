@@ -152,10 +152,52 @@
 
    
 
-    function buscarUsuario() {
-      var busqueda = document.getElementById("busqueda").value;
-      google.script.run.withSuccessHandler(mostrarDatos).buscarUsuario(busqueda);
-    }
+    
+  const BASE_URL = 'https://script.google.com/macros/s/AKfycbwqra8tHOhOrHQp13D8Gm0R_EGa4H7Ya7gJMeYi8ZsQ7FXPnm006VFUUFaLAgQjCgWsqQ/exec';
+
+  function buscarUsuario() {
+    const busqueda = document.getElementById("busqueda").value;
+    
+    fetch(BASE_URL, {
+      method: 'POST',
+      body: new URLSearchParams({
+        action: 'buscarUsuario',
+        busqueda: busqueda
+      })
+    })
+    .then(response => response.json())
+    .then(datos => {
+      if (datos) {
+        mostrarDatos(datos);
+      } else {
+        alert("No se encontró el usuario.");
+      }
+    })
+    .catch(error => console.error("Error en la búsqueda:", error));
+  }
+
+  function marcarAsistido() {
+    const busqueda = document.getElementById("busqueda").value;
+
+    fetch(BASE_URL, {
+      method: 'POST',
+      body: new URLSearchParams({
+        action: 'actualizarEstadoAsistencia',
+        busqueda: busqueda
+      })
+    })
+    .then(response => response.json())
+    .then(response => {
+      if (response.resultado) {
+        alert("Usuario marcado como asistido.");
+      } else {
+        alert("Error al marcar al usuario.");
+      }
+    })
+    .catch(error => console.error("Error al marcar asistencia:", error));
+  }
+
+
 
     function mostrarDatos(datos) {
       var resultadoDiv = document.getElementById("resultado");
