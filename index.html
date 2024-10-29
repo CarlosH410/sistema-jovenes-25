@@ -5,114 +5,10 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Gestión de Usuarios</title>
+  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f0f4f8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      padding: 20px;
-    }
-    .container {
-      max-width: 500px;
-      width: 100%;
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-      padding: 30px;
-      transition: transform 0.3s;
-    }
-    .container:hover {
-      transform: translateY(-5px);
-    }
-    h1 {
-      color: #333;
-      margin-bottom: 20px;
-      font-weight: 700;
-      text-align: center;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 15px;
-      margin-top: 10px;
-      border: 2px solid #3498db;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: border-color 0.3s;
-      outline: none;
-    }
-    input[type="text"]:focus {
-      border-color: #2980b9;
-    }
-    button {
-      width: 100%;
-      padding: 15px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 8px;
-      background-color: #3498db;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-      font-size: 16px;
-    }
-    button:hover {
-      background-color: #2980b9;
-      transform: translateY(-2px);
-    }
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 8px;
-      background-color: #ecf0f1;
-      display: none;
-      transition: opacity 0.3s ease;
-      opacity: 0;
-    }
-    .result.show {
-      display: block;
-      opacity: 1;
-    }
-    .user-data {
-      margin: 10px 0;
-      padding: 15px;
-      border: 1px solid #bdc3c7;
-      border-radius: 8px;
-      background-color: #fff;
-      text-align: left;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    img {
-      margin-top: 10px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      border-radius: 8px;
-    }
-    p {
-      margin: 0;
-      color: #555;
-      line-height: 1.5;
-    }
-    #qr-reader {
-      width: 100%;
-      height: 300px;
-      margin-top: 15px;
-      border: 2px dashed #3498db;
-      border-radius: 8px;
-      display: none; /* Ocultar inicialmente */
-    }
-  </style>
+  
 </head>
 <body>
   <div class="container">
@@ -237,7 +133,7 @@
     { facingMode: "environment" }, // Utilizar la cámara trasera
     {
       fps: 500,
-      qrbox: { width: 250, height: 250 } // Tamaño del cuadro de detección
+      qrbox: { width: 400, height: 300 } // Tamaño del cuadro de detección
     },
     (decodedText) => {
       // Se ha leído un código QR exitosamente
