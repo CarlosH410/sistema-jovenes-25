@@ -131,73 +131,61 @@
     <button onclick="activarCamara()">Leer Código QR</button>
   </div>
 
+
+
   <script>
 
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbz9KlfUFNdHAtGBVNOBWNkzZ2TAcn42cKqmaXygt2TZ7A4RmuX_NgF1ntZuERKoioyUpA/exec';
 
-    async function obtenerDatos(id) {
-        
 
-        try {
-          const response = await fetch(`${scriptUrl}?id=${id}`);
-          const data = await response.json();
-          console.log(data); // Procesa los datos recibidos, puedes mostrarlos en la interfaz
-        } catch (error) {
-          console.error('Error al obtener datos:', error);
+    
+    const BASE_URL = 'https://script.google.com/macros/s/AKfycbwqra8tHOhOrHQp13D8Gm0R_EGa4H7Ya7gJMeYi8ZsQ7FXPnm006VFUUFaLAgQjCgWsqQ/exec';
+
+
+    function buscarUsuario() {
+
+        const busqueda = document.getElementById("busqueda").value;
+          
+          fetch(BASE_URL, {
+            method: 'POST',
+            body: new URLSearchParams({
+              action: 'buscarUsuario',
+              busqueda: busqueda
+            })
+          })
+          .then(response => response.json())
+          .then(datos => {
+            if (datos) {
+              mostrarDatos(datos);
+            } else {
+              alert("No se encontró el usuario.");
+            }
+          })
+          .catch(error => console.error("Error en la búsqueda:", error));
         }
-    }      
-
-
-
-
-   
-
     
-  const BASE_URL = 'https://script.google.com/macros/s/AKfycbwqra8tHOhOrHQp13D8Gm0R_EGa4H7Ya7gJMeYi8ZsQ7FXPnm006VFUUFaLAgQjCgWsqQ/exec';
-
-  function buscarUsuario() {
-    const busqueda = document.getElementById("busqueda").value;
+        function marcarAsistido() {
+          const busqueda = document.getElementById("busqueda").value;
     
-    fetch(BASE_URL, {
-      method: 'POST',
-      body: new URLSearchParams({
-        action: 'buscarUsuario',
-        busqueda: busqueda
-      })
-    })
-    .then(response => response.json())
-    .then(datos => {
-      if (datos) {
-        mostrarDatos(datos);
-      } else {
-        alert("No se encontró el usuario.");
-      }
-    })
-    .catch(error => console.error("Error en la búsqueda:", error));
-  }
-
-  function marcarAsistido() {
-    const busqueda = document.getElementById("busqueda").value;
-
-    fetch(BASE_URL, {
-      method: 'POST',
-      body: new URLSearchParams({
-        action: 'actualizarEstadoAsistencia',
-        busqueda: busqueda
-      })
-    })
-    .then(response => response.json())
-    .then(response => {
-      if (response.resultado) {
+          fetch(BASE_URL, {
+            method: 'POST',
+            body: new URLSearchParams({
+              action: 'actualizarEstadoAsistencia',
+              busqueda: busqueda
+            })
+          })
+          .then(response => response.json())
+          .then(response => {
+            if (response.resultado) {
         alert("Usuario marcado como asistido.");
       } else {
-        alert("Error al marcar al usuario.");
-      }
-    })
-    .catch(error => console.error("Error al marcar asistencia:", error));
-  }
+              alert("Error al marcar al usuario.");
+            }
+          })
+          .catch(error => console.error("Error al marcar asistencia:", error));
+    }
 
 
+          
 
     function mostrarDatos(datos) {
       var resultadoDiv = document.getElementById("resultado");
@@ -239,35 +227,52 @@
     }
 
     function activarCamara() {
-      const qrReader = document.getElementById("qr-reader");
-      qrReader.style.display = "block"; // Mostrar el lector de QR
-      
-      const html5QrCode = new Html5Qrcode("qr-reader");
+  const qrReader = document.getElementById("qr-reader");
+  qrReader.style.display = "block"; // Mostrar el lector de QR
+  
+  const html5QrCode = new Html5Qrcode("qr-reader");
 
-      // Iniciar la cámara
-      html5QrCode.start(
-        { facingMode: "environment" }, // Utilizar la cámara trasera
-        {
-          fps: 10,
-          qrbox: { width: 250, height: 250 } // Tamaño del cuadro de detección
-        },
-        (decodedText, decodedResult) => {
-          // Se ha leído un código QR exitosamente
-          html5QrCode.stop(); // Detener la cámara
-          buscarPorQR(decodedText); // Buscar usuario por el texto decodificado
-        },
-        (errorMessage) => {
-          // Manejar errores de lectura
-          console.log("Error de lectura: ", errorMessage);
-        }
-      ).catch(err => {
-        console.log("Error al iniciar la cámara: ", err);
-      });
+  // Iniciar la cámara
+  html5QrCode.start(
+    { facingMode: "environment" }, // Utilizar la cámara trasera
+    {
+      fps: 500,
+      qrbox: { width: 250, height: 250 } // Tamaño del cuadro de detección
+    },
+    (decodedText) => {
+      // Se ha leído un código QR exitosamente
+      html5QrCode.stop(); // Detener la cámara
+      buscarUsuarioQR(decodedText); // Llamar a la función de búsqueda con el valor QR decodificado
+    },
+    (errorMessage) => {
+      // Manejar errores de lectura
+      console.log("Error de lectura: ", errorMessage);
     }
+  ).catch(err => {
+    console.log("Error al iniciar la cámara: ", err);
+  });
+}
 
-    function buscarPorQR(qrText) {
-      google.script.run.withSuccessHandler(mostrarDatos).buscarUsuario(qrText);
+// Nueva función para buscar por QR
+function buscarUsuarioQR(qrText) {
+  fetch(BASE_URL, {
+    method: 'POST',
+    body: new URLSearchParams({
+      action: 'buscarUsuario',
+      busqueda: qrText // Buscar usando el texto QR
+    })
+  })
+  .then(response => response.json())
+  .then(datos => {
+    if (datos) {
+      mostrarDatos(datos); // Mostrar los datos del usuario si se encuentran
+    } else {
+      alert("No se encontró el usuario.");
     }
+  })
+  .catch(error => console.error("Error en la búsqueda por QR:", error));
+}
+
   </script>
 </body>
 </html>

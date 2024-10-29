@@ -2,9 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Gestión de Usuarios</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -29,6 +31,9 @@
       padding: 30px;
       transition: transform 0.3s;
     }
+    .container:hover {
+      transform: translateY(-5px);
+    }
     h1 {
       color: #333;
       margin-bottom: 20px;
@@ -45,6 +50,9 @@
       transition: border-color 0.3s;
       outline: none;
     }
+    input[type="text"]:focus {
+      border-color: #2980b9;
+    }
     button {
       width: 100%;
       padding: 15px;
@@ -55,10 +63,12 @@
       color: white;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, transform 0.2s;
+      font-size: 16px;
     }
     button:hover {
       background-color: #2980b9;
+      transform: translateY(-2px);
     }
     .result {
       margin-top: 20px;
@@ -73,6 +83,27 @@
       display: block;
       opacity: 1;
     }
+    .user-data {
+      margin: 10px 0;
+      padding: 15px;
+      border: 1px solid #bdc3c7;
+      border-radius: 8px;
+      background-color: #fff;
+      text-align: left;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    img {
+      margin-top: 10px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 8px;
+    }
+    p {
+      margin: 0;
+      color: #555;
+      line-height: 1.5;
+    }
     #qr-reader {
       width: 100%;
       height: 300px;
@@ -80,46 +111,6 @@
       border: 2px dashed #3498db;
       border-radius: 8px;
       display: none; /* Ocultar inicialmente */
-    }
-
-    /* Estilos específicos para dispositivos móviles */
-    @media (max-width: 480px) {
-      body {
-        padding: 10px;
-        height: auto;
-        background-color: #e0e4e8;
-      }
-
-      .container {
-        width: 100%;
-        max-width: none;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-      }
-
-      h1 {
-        font-size: 24px;
-        margin-bottom: 15px;
-      }
-
-      input[type="text"] {
-        padding: 12px;
-        font-size: 14px;
-      }
-
-      button {
-        padding: 12px;
-        font-size: 14px;
-      }
-
-      .result {
-        padding: 10px;
-      }
-
-      #qr-reader {
-        height: 250px;
-      }
     }
   </style>
 </head>
@@ -140,12 +131,61 @@
     <button onclick="activarCamara()">Leer Código QR</button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/gh/mebjas/html5-qrcode/minified/html5-qrcode.min.js"></script>
   <script>
-    function buscarUsuario() {
-      var busqueda = document.getElementById("busqueda").value;
-      google.script.run.withSuccessHandler(mostrarDatos).buscarUsuario(busqueda);
-    }
+
+         
+
+
+
+
+   
+
+    
+  const BASE_URL = 'https://script.google.com/macros/s/AKfycbwqra8tHOhOrHQp13D8Gm0R_EGa4H7Ya7gJMeYi8ZsQ7FXPnm006VFUUFaLAgQjCgWsqQ/exec';
+
+  function buscarUsuario() {
+    const busqueda = document.getElementById("busqueda").value;
+    
+    fetch(BASE_URL, {
+      method: 'POST',
+      body: new URLSearchParams({
+        action: 'buscarUsuario',
+        busqueda: busqueda
+      })
+    })
+    .then(response => response.json())
+    .then(datos => {
+      if (datos) {
+        mostrarDatos(datos);
+      } else {
+        alert("No se encontró el usuario.");
+      }
+    })
+    .catch(error => console.error("Error en la búsqueda:", error));
+  }
+
+  function marcarAsistido() {
+    const busqueda = document.getElementById("busqueda").value;
+
+    fetch(BASE_URL, {
+      method: 'POST',
+      body: new URLSearchParams({
+        action: 'actualizarEstadoAsistencia',
+        busqueda: busqueda
+      })
+    })
+    .then(response => response.json())
+    .then(response => {
+      if (response.resultado) {
+        alert("Usuario marcado como asistido.");
+      } else {
+        alert("Error al marcar al usuario.");
+      }
+    })
+    .catch(error => console.error("Error al marcar asistencia:", error));
+  }
+
+
 
     function mostrarDatos(datos) {
       var resultadoDiv = document.getElementById("resultado");
@@ -213,9 +253,31 @@
       });
     }
 
-    function buscarPorQR(qrText) {
-      google.script.run.withSuccessHandler(datos).buscarUsuario(qrText);
+    // Nueva función para buscar por QR
+function buscarUsuarioQR(qrText) {
+  fetch(BASE_URL, {
+    method: 'POST',
+    body: new URLSearchParams({
+      action: 'buscarUsuario',
+      busqueda: qrText // Buscar usando el texto QR
+    })
+  })
+  .then(response => response.json())
+  .then(datos => {
+    if (datos) {
+      mostrarDatos(datos); // Mostrar los datos del usuario si se encuentran
+    } else {
+      alert("No se encontró el usuario.");
     }
+  })
+  .catch(error => console.error("Error en la búsqueda por QR:", error));
+}
+
   </script>
 </body>
 </html>
+
+
+
+
+
