@@ -30,55 +30,57 @@
 
 
   <script>
-
-
-
-    
-    const BASE_URL = 'https://script.google.com/macros/s/AKfycbwqra8tHOhOrHQp13D8Gm0R_EGa4H7Ya7gJMeYi8ZsQ7FXPnm006VFUUFaLAgQjCgWsqQ/exec';
-
+    const BASE_URL = 'https://script.google.com/macros/s/AKfycbys2ulM_0edCt9BL6nb_2qoGiMDtFHW4zkD-psRQy-bZ9PBrbFtWEvSi-8VR4g2acDK/exec';
 
     function buscarUsuario() {
 
-        const busqueda = document.getElementById("busqueda").value;
-          
-          fetch(BASE_URL, {
-            method: 'POST',
-            body: new URLSearchParams({
-              action: 'buscarUsuario',
-              busqueda: busqueda
-            })
-          })
-          .then(response => response.json())
-          .then(datos => {
-            if (datos) {
-              mostrarDatos(datos);
-            } else {
-              alert("No se encontró el usuario.");
-            }
-          })
-          .catch(error => console.error("Error en la búsqueda:", error));
+
+      const busqueda = document.getElementById("busqueda").value;
+
+    
+      fetch(BASE_URL, {
+        method: 'POST',
+        body: new URLSearchParams({
+          action: 'buscarUsuario',
+          busqueda: busqueda
+        })
+      })
+      .then(response => response.json())
+      .then(datos => {
+        if (datos) {
+          mostrarDatos(datos);
+        } else {
+      
+          alert("No se encontró el usuario.");
         }
-    
-        function marcarAsistido() {
-          const busqueda = document.getElementById("busqueda").value;
-    
-          fetch(BASE_URL, {
-            method: 'POST',
-            body: new URLSearchParams({
-              action: 'actualizarEstadoAsistencia',
-              busqueda: busqueda
-            })
-          })
-          .then(response => response.json())
-          .then(response => {
-            if (response.resultado) {
-        alert("Usuario marcado como asistido.");
-      } else {
-              alert("Error al marcar al usuario.");
-            }
-          })
-          .catch(error => console.error("Error al marcar asistencia:", error));
+      })
+
+      .catch(error => console.error("Error en la búsqueda:", error));
     }
+
+
+    
+    function marcarAsistido() {
+  const busqueda = document.getElementById("busqueda").value;
+
+  fetch(BASE_URL, {
+    method: 'POST',
+    body: new URLSearchParams({
+      action: 'actualizarEstadoAsistencia',
+      busqueda: busqueda
+    })
+  })
+  .then(response => response.json())
+  .then(response => {
+    if (response.resultado) {
+      alert("Usuario marcado como asistido.");
+    } else {
+      alert("Error al marcar al usuario.");
+    }
+  })
+  .catch(error => console.error("Error al marcar asistencia:", error));
+}
+
 
 
           
@@ -91,10 +93,15 @@
       if (datos) {
         resultadoDiv.classList.add("show");
         datosUsuario.innerHTML = `
-          <p><strong>Nombre:</strong> ${datos.nombre}</p>
-          <p><strong>Email:</strong> ${datos.email}</p>
-          <p><strong>DNI:</strong> ${datos.dni}</p>
+         <p><strong>Nombre:</strong> ${datos.nombre}</p>
+          <p><strong>Edad:</strong> ${datos.edad}</p>
+          <p><strong>Contacto:</strong> ${datos.contacto}</p>
+          <p><strong>Zona:</strong> ${datos.zona}</p>
+          <p><strong>Iglesia:</strong> ${datos.iglesia}</p>
+          <p><strong>Dni:</strong> ${datos.dni}</p>
           <p><strong>ID único:</strong> ${datos.id}</p>
+          <p><strong>Habitacion:</strong> ${datos.habitacion}</p>
+          <p><strong>Equipo:</strong> ${datos.equipo}</p>
         `;
         
         var codigoQRUrl = 'https://quickchart.io/qr?text=' + datos.id + '&size=150';
@@ -106,23 +113,9 @@
       }
     }
 
-    function marcarAsistido() {
-      var busqueda = document.getElementById("busqueda").value;
-      if (!busqueda) {
-        alert("Por favor, realiza una búsqueda primero.");
-        return;
-      }
-      
-      google.script.run.withSuccessHandler(function(response) {
-        if (response) {
-          alert("Usuario marcado como asistido.");
-        } else {
-          alert("Error al marcar al usuario.");
-        }
-      }).actualizarEstadoAsistencia(busqueda);
-    }
+    
 
-    function activarCamara() {
+  function activarCamara() {
   const qrReader = document.getElementById("qr-reader");
   qrReader.style.display = "block"; // Mostrar el lector de QR
   

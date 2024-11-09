@@ -127,5 +127,17 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     return false; // Retorna false si no se encuentra el usuario
   }
   
-
+  function actualizarEstadoAsistencia(busqueda) {
+    var hoja = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var datos = hoja.getDataRange().getValues(); // Obtener todos los datos de la hoja
+  
+    // Recorrer los datos y buscar por ID o DNI
+    for (var i = 1; i < datos.length; i++) { // Comenzar en 1 para omitir la cabecera
+      if (datos[i][4] == busqueda || datos[i][3] == busqueda) { // Columna E (ID) o columna D (DNI)
+        hoja.getRange(i + 1, 7).setValue("Asistido"); // Marcar en la columna G (7) como "Asistido"
+        return true; // Retornar true si se actualiza correctamente
+      }
+    }
+    return false; // Retorna false si no se encuentra el usuario
+  }
 
