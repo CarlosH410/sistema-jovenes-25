@@ -78,7 +78,7 @@ document.getElementById('registerForm').addEventListener('submit', function(even
   // Función para generar un ID aleatorio de 3 letras y 3 números
   function generarIDBasadoEnDNI() {
     var letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var id = '';
+    var id = '';                         
     
     // Generar 3 letras aleatorias
     for (var i = 0; i < 3; i++) {

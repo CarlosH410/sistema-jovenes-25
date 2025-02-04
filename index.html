@@ -18,7 +18,18 @@
     
     <div class="result" id="resultado">
       <h2>Datos del Usuario</h2>
-      <div class="user-data" id="datosUsuario"></div>
+      <table id="tablaUsuario">
+        <thead>
+          <tr>
+            <th>Campo</th>
+            <th>Valor</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Datos dinámicos aquí -->
+        </tbody>
+      </table>
       <img id="codigoQR" alt="Código QR" style="display:none;"/>
       <button onclick="marcarAsistido()">Marcar como Asistido</button>
     </div>
@@ -30,8 +41,11 @@
 
 
   <script>
-    const BASE_URL = 'https://script.google.com/macros/s/AKfycbwcS6pCK1b-gIbEM5Fny7bvrAwAJ6gfuZV9RE525OimtwOMRZXx-PQtpylUivPijVq9/exec';
+    //https://script.google.com/macros/s/AKfycbwcS6pCK1b-gIbEM5Fny7bvrAwAJ6gfuZV9RE525OimtwOMRZXx-PQtpylUivPijVq9/exec
+    //https://script.google.com/macros/s/AKfycbwMXIgFNPa1H98O5QcXq6bxyi4JktfMcY_YwyFd8GmyRiqaxz2b_01x8LlWsElsbNLT/exec
 
+    const BASE_URL = 'https://script.google.com/macros/s/AKfycbwMXIgFNPa1H98O5QcXq6bxyi4JktfMcY_YwyFd8GmyRiqaxz2b_01x8LlWsElsbNLT/exec';
+    
     function buscarUsuario() {
 
 
@@ -59,8 +73,8 @@
     }
 
 
-    
-    function marcarAsistido() {
+     
+  function marcarAsistido() {
   const busqueda = document.getElementById("busqueda").value;
 
   fetch(BASE_URL, {
@@ -85,32 +99,28 @@
 
           
 
-    function mostrarDatos(datos) {
-      var resultadoDiv = document.getElementById("resultado");
-      var datosUsuario = document.getElementById("datosUsuario");
-      var codigoQR = document.getElementById("codigoQR");
-      
-      if (datos) {
-        resultadoDiv.classList.add("show");
-        datosUsuario.innerHTML = `
-         <p><strong>Nombre:</strong> ${datos.nombre}</p>
-          <p><strong>Edad:</strong> ${datos.edad}</p>
-          <p><strong>Contacto:</strong> ${datos.contacto}</p>
-          <p><strong>Zona:</strong> ${datos.zona}</p>
-          <p><strong>Iglesia:</strong> ${datos.iglesia}</p>
-          <p><strong>Dni:</strong> ${datos.dni}</p>
-          <p><strong>ID único:</strong> ${datos.id}</p>
-          <p><strong>Habitacion:</strong> ${datos.habitacion}</p>
-          <p><strong>Equipo:</strong> ${datos.equipo}</p>
-        `;
-        
-        var codigoQRUrl = 'https://quickchart.io/qr?text=' + datos.id + '&size=150';
-        codigoQR.src = codigoQRUrl;
-        codigoQR.style.display = "block";
-      } else {
-        resultadoDiv.classList.remove("show");
-        alert("No se encontró el usuario.");
+function mostrarDatos(datos) {
+      const resultadoDiv = document.getElementById("resultado");
+      const tablaUsuario = document.getElementById("tablaUsuario").querySelector("tbody");
+      const codigoQR = document.getElementById("codigoQR");
+
+      // Limpiar tabla
+      tablaUsuario.innerHTML = '';
+
+      // Agregar datos a la tabla
+      for (const [key, value] of Object.entries(datos)) {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `<td>${key}</td><td>${value}</td>`;
+        tablaUsuario.appendChild(fila);
       }
+
+      // Mostrar QR
+      const codigoQRUrl = `https://quickchart.io/qr?text=${datos.id}&size=200`;
+      codigoQR.src = codigoQRUrl;
+      codigoQR.style.display = "block";
+
+      // Mostrar resultado
+      resultadoDiv.classList.add("show");
     }
 
     
