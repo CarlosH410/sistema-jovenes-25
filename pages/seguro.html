@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gestión de Usuarios</title>
+  <link rel="stylesheet" href="style-nuevo.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Sistema de Gestión de Usuarios</h1>
+      <p>Busca usuarios por ID o DNI</p>
+    </header>
+
+    <div class="search-box">
+      <input type="text" id="busqueda" placeholder="Ingresa ID o DNI">
+      <button onclick="buscarUsuario()">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+      <button onclick="limpiarBusqueda()" class="btn-limpiar">
+        <i class="fas fa-eraser"></i> Limpiar
+      </button>
+    </div>
+
+    <div class="result" id="resultado">
+      <h2>Datos del Usuario</h2>
+      <table id="tablaUsuario">
+        <tbody>
+          <!-- Datos dinámicos aquí -->
+        </tbody>
+      </table>
+
+      <!-- Botones de pago -->
+      <div class="botones-pago">
+        <button id="btnPago70000" onclick="seleccionarPago(70000)">
+          <i class="fas fa-money-bill-wave"></i> 70,000 pesos
+        </button>
+        <button id="btnPago105000" onclick="seleccionarPago(105000)">
+          <i class="fas fa-money-bill-wave"></i> 105,000 pesos
+        </button>
+      </div>
+
+      <!-- Botón de guardar -->
+      <div class="boton-guardar">
+        <button id="btnGuardar" onclick="guardarPago()" disabled>
+          <i class="fas fa-save"></i> Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const BASE_URL = 'https://script.google.com/macros/s/AKfycbxTQfl7mrgztB56PQs1eD7lnQmTsZr8BWObDJbRKU9e9_4HL_RAGKmNsJPy22AAPrXHnQ/exec';
+    let usuarioId = null; // Almacenará el ID del usuario buscado
+    let montoSeleccionado = null; // Almacenará el monto seleccionado (70,000 o 105,000)
+
+    function buscarUsuario() {
+      const busqueda = document.getElementById("busqueda").value.trim();
+
+      if (!busqueda || isNaN(busqueda)) {
+        alert("Por favor, ingresa un ID o DNI válido (solo números).");
+        return;
+      }
+
+      fetch(BASE_URL, {
+        method: 'POST',
+        body: new URLSearchParams({
+          action: 'buscarUsuario',
+          busqueda: busqueda
+        })
+      })
+      .then(response => response.json())
+      .then(datos => {
+        if (datos) {
+          mostrarDatos(datos);
+          usuarioId = datos.id; // Guardar el ID del usuario
+          resetearBotonesPago(); // Resetear los botones de pago
+        } else {
+          alert("No se encontró el usuario.");
+        }
+      })
+      .catch(error => {
+        console.error("Error en la búsqueda:", error);
+        alert("Hubo un error al buscar el usuario. Inténtalo de nuevo.");
+      });
+    }
+
+    function mostrarDatos(datos) {
+      const resultadoDiv = document.getElementById("resultado");
+      const tablaUsuario = document.getElementById("tablaUsuario").querySelector("tbody");
+
+      // Limpiar tabla
+      tablaUsuario.innerHTML = '';
+
+      // Definir el orden de los campos
+      const campos = [
+        { nombre: "Nombre", clave: "nombre" },
+        { nombre: "Edad", clave: "edad" },
+        { nombre: "DNI", clave: "dni" },
+        { nombre: "Zona", clave: "zona" },
+        { nombre: "Iglesia", clave: "iglesia" },
+        { nombre: "Pago (Columna Q)", clave: "pago" },
+        { nombre: "Columna R", clave: "columnaR" },
+        { nombre: "Columna S", clave: "columnaS" } // Nuevo campo para el pago de 105,000
+      ];
+
+      // Agregar datos a la tabla
+      campos.forEach(campo => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td class="campo">${campo.nombre}</td>
+          <td class="valor">${datos[campo.clave] || "N/A"}</td>
+        `;
+        tablaUsuario.appendChild(fila);
+      });
+
+      // Mostrar resultado con animación
+      resultadoDiv.style.display = "block";
+      setTimeout(() => {
+        resultadoDiv.style.opacity = "1";
+        resultadoDiv.style.transform = "translateY(0)";
+      }, 10);
+    }
+
+    function seleccionarPago(monto) {
+      const btnPago70000 = document.getElementById("btnPago70000");
+      const btnPago105000 = document.getElementById("btnPago105000");
+      const btnGuardar = document.getElementById("btnGuardar");
+
+      // Resetear ambos botones
+      btnPago70000.classList.remove("seleccionado");
+      btnPago105000.classList.remove("seleccionado");
+
+      // Seleccionar el botón correspondiente
+      if (monto === 70000) {
+        btnPago70000.classList.add("seleccionado");
+        montoSeleccionado = 70000;
+      } else if (monto === 105000) {
+        btnPago105000.classList.add("seleccionado");
+        montoSeleccionado = 105000;
+      }
+
+      // Habilitar el botón de guardar
+      btnGuardar.disabled = false;
+    }
+
+    function resetearBotonesPago() {
+      const btnPago70000 = document.getElementById("btnPago70000");
+      const btnPago105000 = document.getElementById("btnPago105000");
+      const btnGuardar = document.getElementById("btnGuardar");
+
+      // Resetear botones de pago
+      btnPago70000.classList.remove("seleccionado");
+      btnPago105000.classList.remove("seleccionado");
+      btnGuardar.disabled = true;
+      montoSeleccionado = null;
+    }
+
+    function guardarPago() {
+      if (!usuarioId || !montoSeleccionado) {
+        alert("No se ha seleccionado un monto válido.");
+        return;
+      }
+
+      fetch(BASE_URL, {
+        method: 'POST',
+        body: new URLSearchParams({
+          action: 'guardarPago',
+          id: usuarioId,
+          monto: montoSeleccionado
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.resultado) {
+          alert("Pago guardado correctamente.");
+          buscarUsuario(); // Actualizar los datos mostrados
+        } else {
+          alert("Hubo un error al guardar el pago.");
+        }
+      })
+      .catch(error => {
+        console.error("Error al guardar el pago:", error);
+        alert("Hubo un error al guardar el pago. Inténtalo de nuevo.");
+      });
+    }
+
+    function limpiarBusqueda() {
+      const resultadoDiv = document.getElementById("resultado");
+      const tablaUsuario = document.getElementById("tablaUsuario").querySelector("tbody");
+      const busquedaInput = document.getElementById("busqueda");
+
+      // Limpiar tabla y campo de búsqueda
+      tablaUsuario.innerHTML = '';
+      busquedaInput.value = '';
+      resetearBotonesPago();
+
+      // Ocultar resultado
+      resultadoDiv.style.opacity = "0";
+      resultadoDiv.style.transform = "translateY(20px)";
+      setTimeout(() => {
+        resultadoDiv.style.display = "none";
+      }, 300);
+    }
+  </script>
+</body>
+</html>

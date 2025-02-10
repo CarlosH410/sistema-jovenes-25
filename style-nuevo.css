@@ -1,0 +1,175 @@
+/* Estilos generales */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f7f6;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin: 0;
+}
+
+header p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
+
+/* Estilos de la caja de búsqueda */
+.search-box {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.search-box input {
+  width: 60%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-box button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-box button:hover {
+  background-color: #2980b9;
+}
+
+.search-box button i {
+  margin-right: 5px;
+}
+
+.btn-limpiar {
+  background-color: #e74c3c;
+}
+
+.btn-limpiar:hover {
+  background-color: #c0392b;
+}
+
+/* Estilos de los resultados */
+.result {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  margin-top: 20px;
+}
+
+.result.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.result h2 {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+table td {
+  padding: 12px;
+  border: 1px solid #ccc;
+}
+
+table td.campo {
+  background-color: #f4f7f6;
+  font-weight: bold;
+  width: 30%;
+}
+
+table td.valor {
+  background-color: #fff;
+  width: 70%;
+}
+
+/* Estilos de los botones de pago */
+.botones-pago {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+#btnPago70000,
+#btnPago105000 {
+  padding: 10px 20px;
+  background-color: #3498db;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#btnPago70000.seleccionado,
+#btnPago105000.seleccionado {
+  background-color: #2ecc71; /* Verde */
+}
+
+#btnPago70000:disabled,
+#btnPago105000:disabled {
+  background-color: #bdc3c7; /* Gris */
+  cursor: not-allowed;
+}
+
+/* Estilos del botón de guardar */
+.boton-guardar {
+  margin-top: 20px;
+  text-align: right;
+}
+
+#btnGuardar {
+  padding: 10px 20px;
+  background-color: #e67e22;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#btnGuardar:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}

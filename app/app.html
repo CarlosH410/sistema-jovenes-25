@@ -40,7 +40,7 @@
   </div>
 
   <script>
-    const BASE_URL = 'https://script.google.com/macros/s/AKfycbxaN1XHAMx-WEhhJq5EK6FhFbIQZsyV0fDaYFchB56QUWS9hV4tuFH-VN5cntxVukcg/exec';
+    const BASE_URL = 'https://script.google.com/macros/s/AKfycbxTQfl7mrgztB56PQs1eD7lnQmTsZr8BWObDJbRKU9e9_4HL_RAGKmNsJPy22AAPrXHnQ/exec';
 
     // Función para abrir la nueva interfaz
     function abrirNuevaInterfaz() {
@@ -85,18 +85,12 @@
       // Limpiar tabla
       tablaUsuario.innerHTML = '';
 
-       // Campos específicos que deseas mostrar
-      const campos = ['nombre', 'edad', 'contacto', 'zona', 'iglesia', 'dni', 'id', 'habitacion', 'equipo'];
-
       // Agregar datos a la tabla
-      campos.forEach(campo => {
-
-        if (usuario[campo]) {
-          const fila = document.createElement("tr");
-          fila.innerHTML = `<td>${campo}</td><td>${usuario[campo]}</td>`;
-          tablaUsuario.appendChild(fila);
-        }
-      });
+      for (const [key, value] of Object.entries(usuario)) {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `<td>${key}</td><td>${value}</td>`;
+        tablaUsuario.appendChild(fila);
+      }
 
       // Mostrar QR
       const codigoQRUrl = `https://quickchart.io/qr?text=${usuario.id}&size=200`;
@@ -204,8 +198,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-

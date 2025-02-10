@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gestión de Usuarios</title>
+  <link rel="stylesheet" href="prueba.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    
+
+    <h1>Buscar Usuario</h1>
+    <input type="text" id="busqueda" placeholder="Ingresa ID o DNI">
+    <button onclick="buscarUsuario()">Buscar</button>
+    
+    <div class="result" id="resultado">
+      <h2>Datos del Usuario</h2>
+      <table id="tablaUsuario">
+        <thead>
+          <tr>
+            <th>Campo</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Datos dinámicos aquí -->
+        </tbody>
+      </table>
+      
+    </div>
+
+    
+
+  <script>
+
+
+    const BASE_URL = 'https://script.google.com/macros/s/AKfycbwMXIgFNPa1H98O5QcXq6bxyi4JktfMcY_YwyFd8GmyRiqaxz2b_01x8LlWsElsbNLT/exec';
+
+    
+
+function buscarUsuario() {
+  const busqueda = document.getElementById("busqueda").value.trim();
+
+  if (!busqueda) {
+    alert("Por favor, ingresa un ID o DNI.");
+    return;
+  }
+
+  fetch(BASE_URL, {
+    method: 'POST',
+    body: new URLSearchParams({
+      action: 'buscarUsuario',
+      busqueda: busqueda
+    })
+  })
+  .then(response => response.json())
+  .then(datos => {
+    if (datos) {
+      mostrarDatos(datos);
+    } else {
+      alert("No se encontró el usuario.");
+    }
+  })
+  .catch(error => {
+    console.error("Error en la búsqueda:", error);
+    alert("Hubo un error al buscar el usuario. Inténtalo de nuevo.");
+  });
+}
+
+function marcarAsistido() {
+  const busqueda = document.getElementById("busqueda").value.trim();
+
+  if (!busqueda) {
+    alert("No hay un usuario seleccionado para marcar como asistido.");
+    return;
+  }
+
+  fetch(BASE_URL, {
+    method: 'POST',
+    body: new URLSearchParams({
+      action: 'actualizarEstadoAsistencia',
+      busqueda: busqueda
+    })
+  })
+  .then(response => response.json())
+  .then(response => {
+    if (response.resultado) {
+      alert("Usuario marcado como asistido.");
+
+      // Resaltar el nombre del usuario en verde
+      const filas = document.querySelectorAll("#tablaUsuario tbody tr");
+      filas.forEach(fila => {
+        const campo = fila.querySelector("td:first-child").textContent.toLowerCase();
+        if (campo === "nombre") {
+          fila.querySelector("td:last-child").classList.add("asistido");
+        }
+      });
+    } else {
+      alert("Error al marcar al usuario: " + response.mensaje);
+    }
+  })
+  .catch(error => {
+    console.error("Error al marcar asistencia:", error);
+    alert("Hubo un error al marcar la asistencia. Inténtalo de nuevo.");
+  });
+}
+
+function mostrarDatos(datos) {
+  const resultadoDiv = document.getElementById("resultado");
+  const tablaUsuario = document.getElementById("tablaUsuario").querySelector("tbody");
+  const codigoQR = document.getElementById("codigoQR");
+
+  // Limpiar tabla
+  tablaUsuario.innerHTML = '';
+
+  // Agregar datos a la tabla
+  for (const [key, value] of Object.entries(datos)) {
+    const fila = document.createElement("tr");
+    fila.innerHTML = `<td>${key}</td><td>${value}</td>`;
+    tablaUsuario.appendChild(fila);
+  }
+
+  // Mostrar QR
+  const codigoQRUrl = `https://quickchart.io/qr?text=${datos.id}&size=200`;
+  codigoQR.src = codigoQRUrl;
+  codigoQR.style.display = "block";
+
+  // Mostrar resultado
+  resultadoDiv.classList.add("show");
+}
+
+function activarCamara() {
+  const qrReader = document.getElementById("qr-reader");
+  qrReader.style.display = "block"; // Mostrar el lector de QR
+
+  const html5QrCode = new Html5Qrcode("qr-reader");
+
+  // Iniciar la cámara
+  html5QrCode.start(
+    { facingMode: "environment" }, // Utilizar la cámara trasera
+    {
+      fps: 500,
+      qrbox: { width: 400, height: 300 } // Tamaño del cuadro de detección
+    },
+    (decodedText) => {
+      // Se ha leído un código QR exitosamente
+      html5QrCode.stop(); // Detener la cámara
+      buscarUsuarioQR(decodedText); // Llamar a la función de búsqueda con el valor QR decodificado
+    },
+    (errorMessage) => {
+      // Manejar errores de lectura
+      console.log("Error de lectura: ", errorMessage);
+    }
+  ).catch(err => {
+    console.log("Error al iniciar la cámara: ", err);
+    alert("No se pudo iniciar la cámara. Asegúrate de permitir el acceso a la cámara.");
+  });
+}
+
+function buscarUsuarioQR(qrText) {
+  fetch(BASE_URL, {
+    method: 'POST',
+    body: new URLSearchParams({
+      action: 'buscarUsuario',
+      busqueda: qrText // Buscar usando el texto QR
+    })
+  })
+  .then(response => response.json())
+  .then(datos => {
+    if (datos) {
+      // Actualizar el campo de búsqueda con el ID o DNI escaneado
+      document.getElementById("busqueda").value = datos.id || datos.dni;
+
+      // Mostrar los datos del usuario
+      mostrarDatos(datos);
+    } else {
+      alert("No se encontró el usuario.");
+    }
+  })
+  .catch(error => {
+    console.error("Error en la búsqueda por QR:", error);
+    alert("Hubo un error al buscar el usuario. Inténtalo de nuevo.");
+  });
+}
+    
+   
+  </script>
+</body>
+</html>

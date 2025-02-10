@@ -1,0 +1,231 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  .container {
+    max-width: 500px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  }
+  
+  h1 {
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-align: center;
+    font-size: 28px;
+  }
+  
+  input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+  }
+  
+  input[type="text"]:focus {
+    border-color: #2980b9;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+  }
+  
+  button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+  }
+  
+  .result {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #ecf0f1;
+    display: none;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+  }
+  
+  .result.show {
+    display: block;
+    opacity: 1;
+  }
+  
+  .user-data {
+    margin: 10px 0;
+    padding: 15px;
+    border: 1px solid #bdc3c7;
+    border-radius: 8px;
+    background-color: #fff;
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  img {
+    margin-top: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  p {
+    margin: 0;
+    color: #555;
+    line-height: 1.5;
+  }
+  
+  #qr-reader {
+    width: 100%;
+    height: auto;
+    margin-top: 15px;
+    border: 2px dashed #3498db;
+    border-radius: 8px;
+    display: none;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 12px;
+    border: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+
+  .asistido {
+    color: green;
+    font-weight: bold;
+  }
+
+
+  /* Estilos para el botón de escritorio */
+.escritorio-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #3498db;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 50px;
+  }
+  
+  .escritorio-btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+  }
+  
+  .escritorio-btn i {
+    margin-right: 5px;
+  }
+  
+  /* Ocultar el botón en dispositivos móviles */
+  @media (max-width: 767px) {
+    .escritorio-btn {
+      display: none;
+    }
+  }
+
+  
+
+  @media (max-width: 480px) {
+    body {
+      padding: 10px;
+      background-color: #e0e4e8;
+    }
+  
+    .container {
+      width: 100%;
+      max-width: none;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+  
+    h1 {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+  
+    input[type="text"] {
+      padding: 12px;
+      font-size: 14px;
+    }
+  
+    button {
+      padding: 12px;
+      font-size: 14px;
+    }
+  
+    .result {
+      padding: 10px;
+    }
+  
+    #qr-reader {
+      height: auto;
+      width: 100%;
+    }
+  }
